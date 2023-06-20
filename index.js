@@ -66,11 +66,6 @@ app.delete('/api/persons/:id', (req, res, next) => {
 //Create new person
 app.post('/api/persons', (req, res, next) => {
   const body = req.body;
-  if (!body.name || !body.number) {
-    res.json({
-      error: `${!body.name ? 'name' : 'number'} must be provided`,
-    });
-  }
 
   const newPerson = new Persons({
     name: body.name,
@@ -108,7 +103,7 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' });
   } else if (error.name === 'ValidationError') {
-    return response.status(400).send({ error: String(error.message) });
+    return response.status(400).send({ error: error.message });
   }
   next(error);
 };
